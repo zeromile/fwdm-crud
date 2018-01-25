@@ -1,29 +1,17 @@
 <?php
 require_once "../connect.php";
 
-if(isset($_POST) & !empty($_POST)){
-	$fname = mysqli_real_escape_string($connection, $_POST['fname']);
-	$lname = mysqli_real_escape_string($connection, $_POST['lname']);
-	$email = mysqli_real_escape_string($connection, $_POST['email']);
-	$gender = $_POST['gender'];
-	$age = $_POST['age'];
+$ReadSql = "SELECT * FROM crud";
 
-	$CreateSql = "INSERT INTO crud (first_name, last_name, email_id, gender, age) VALUES ('$fname', '$lname', '$email', '$gender', '$age')";
+$res = mysqli_query($connection, $ReadSql);
 
-	$res = mysqli_query($connection, $CreateSql) or die(mysqli_error($connection));
-	if($res){
-		$smsg = "Successfully inserted data, Insert New data.";
-	}else{
-		$fmsg = "Data not inserted, please try again later.";
-	}
-
-}
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Simple CRUD Application - CREATE</title>
-<!-- Latest compiled and minified CSS -->
+	<title>Simple CRUD Application - READ Operation</title>
+	<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
 
 <!-- Optional theme -->
@@ -36,60 +24,37 @@ if(isset($_POST) & !empty($_POST)){
 </head>
 <body>
 <div class="container">
-	<?php if(isset($smsg)){ ?><div class="alert alert-success" role="alert"> <?php echo $smsg; ?> </div><?php } ?>
-<?php if(isset($fmsg)){ ?><div class="alert alert-danger" role="alert"> <?php echo $fmsg; ?> </div><?php } ?>
 	<div class="row">
-		<form method="post" class="form-horizontal col-md-6 col-md-offset-3">
-		<h2>Create Operation in CRUD Application</h2>
-			<div class="form-group">
-			    <label for="input1" class="col-sm-2 control-label">First Name</label>
-			    <div class="col-sm-10">
-			      <input type="text" name="fname"  class="form-control" id="input1" placeholder="First Name" />
-			    </div>
-			</div>
-
-			<div class="form-group">
-			    <label for="input1" class="col-sm-2 control-label">Last Name</label>
-			    <div class="col-sm-10">
-			      <input type="text" name="lname"  class="form-control" id="input1" placeholder="Last Name" />
-			    </div>
-			</div>
-
-			<div class="form-group">
-			    <label for="input1" class="col-sm-2 control-label">E-Mail</label>
-			    <div class="col-sm-10">
-			      <input type="email" name="email"  class="form-control" id="input1" placeholder="E-Mail" />
-			    </div>
-			</div>
-
-			<div class="form-group" class="radio">
-			<label for="input1" class="col-sm-2 control-label">Gender</label>
-			<div class="col-sm-10">
-			  <label>
-			    <input type="radio" name="gender" id="optionsRadios1" value="male" checked> Male
-			  </label>
-			  	  <label>
-			    <input type="radio" name="gender" id="optionsRadios1" value="female"> Female
-			  </label>
-			</div>
-			</div>
-
-			<div class="form-group">
-			<label for="input1" class="col-sm-2 control-label">Age</label>
-			<div class="col-sm-10">
-				<select name="age" class="form-control">
-					<option>Select Your Age</option>
-					<option value="20">20's</option>
-					<option value="30">30's</option>
-					<option value="40">40's</option>
-					<option value="50">50's</option>
-					<option value="60">60's</option>
-					<option value="70">70's+</option>
-				</select>
-			</div>
-			</div>
-			<input type="submit" class="btn btn-primary col-md-2 col-md-offset-10" value="submit" />
-		</form>
+	<h2>Read Operation in CRUD applicaiton</h2>
+		<table class="table ">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Full Name</th>
+				<th>E-Mail</th>
+				<th>Age</th>
+				<th>Gender</th>
+				<th>Extras</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+		while($r = mysqli_fetch_assoc($res)){
+		?>
+		<tr>
+			<th scope="row"><?php echo $r['id']; ?></th>
+			<td><?php echo $r['first_name'] . " " . $r['last_name']; ?></td>
+			<td><?php echo $r['email_id']; ?></td>
+			<td><?php echo $r['gender']; ?></td>
+			<td><?php echo $r['age']; ?></td>
+			<td>
+					<a href="update.php?id=<?php echo $r['id']; ?>"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<a href="delete.php?id=<?php echo $r['id']; ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+				</td>
+			</tr>
+		<?php } ?>
+		</tbody>
+		</table>
 	</div>
 </div>
 </body>
