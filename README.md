@@ -7,7 +7,7 @@ Master branch contains the final app
 
 
 ## Run this in mysql... ##
-
+```
 CREATE TABLE `crud` (
   `id` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
@@ -24,3 +24,4 @@ ALTER TABLE `crud`
 --
 ALTER TABLE `crud`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  ```
